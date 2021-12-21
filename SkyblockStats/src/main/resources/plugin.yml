@@ -1,0 +1,9 @@
+name: SkyblockStats
+version: '${project.version}'
+main: ml.igoryan.skyblockstats.Main
+api-version: 1.18
+prefix: SkyblockStats
+load: STARTUP
+authors: [ morozoffnor ]
+description: A plugin to provide human readable and trackable stats/progress through the Skyblock map playthrough
+website: https://github.com/morozoffnor
