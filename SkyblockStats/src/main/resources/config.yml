@@ -15,3 +15,6 @@ Database:
     port: "port"
     user: "user"
     password: "password"
+Integrations:
+  Discord:
+    webhookUrl: Null
