@@ -4,8 +4,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import ml.igoryan.skyblockstats.Handlers.DatabaseHandler;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public final class Main extends JavaPlugin {
 
@@ -25,6 +29,15 @@ public final class Main extends JavaPlugin {
         if(!messagesFile.exists()) {
             saveResource("messages.yml", false);
         }
+        // then try to connect or create a database
+        try {
+           Connection db = DriverManager.getConnection("jdbc:sqlite:plugins/SkyblockStats/database.db");
+           System.out.println("Opened local database successfully!");
+           DatabaseHandler.createTable(db);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
