@@ -16,7 +16,7 @@ public final class Main extends JavaPlugin {
     private File configFile = new File(getDataFolder(), "config.yml");
     private FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-    private File messagesFile = new File(getDataFolder(), "messages.yml");
+    private File messagesFile = new File(getDataFolder(), "messages-en.yml");
 
     @Override
     public void onEnable() {
@@ -27,7 +27,7 @@ public final class Main extends JavaPlugin {
             saveResource("config.yml", false);
         }
         if(!messagesFile.exists()) {
-            saveResource("messages.yml", false);
+            saveResource("messages-en.yml", false);
         }
         // then try to connect or create a database
         try {
