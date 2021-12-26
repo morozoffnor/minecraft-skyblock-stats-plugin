@@ -2,6 +2,9 @@ package ml.igoryan.skyblockstats;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ml.igoryan.skyblockstats.Handlers.DatabaseHandler;
@@ -11,17 +14,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public final class Main extends JavaPlugin {
+public final class Main extends JavaPlugin implements Listener {
 
     private File configFile = new File(getDataFolder(), "config.yml");
     public FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
     private File messagesFile = new File(getDataFolder(), "messages-en.yml");
 
+    Connection db = null;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
-
+        getServer().getPluginManager().registerEvents(new Main(), this);
         // create config and messages file if there is none
         if(!configFile.exists()) {
             saveResource("config.yml", false);
@@ -34,7 +39,7 @@ public final class Main extends JavaPlugin {
             if(!configFile.exists()) {
                 saveResource("config.yml", false);
             }
-           Connection db = DriverManager.getConnection("jdbc:sqlite:plugins/SkyblockStats/database.db");
+           db = DriverManager.getConnection("jdbc:sqlite:plugins/SkyblockStats/database.db");
            getLogger().info("Opened local database successfully!");
            DatabaseHandler.createTable(db, config.getString("Database.table"));
         } catch (SQLException e) {
@@ -47,6 +52,16 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) throws SQLException {
+
+        // TODO: insert a player into a database only if they aren't there already
+
+        String playerName = event.getPlayer().getName();
+        DatabaseHandler handler = new DatabaseHandler();
+        handler.addPlayer(db, playerName);
     }
 
 }

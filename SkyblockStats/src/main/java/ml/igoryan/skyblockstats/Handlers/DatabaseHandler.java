@@ -3,6 +3,7 @@ package ml.igoryan.skyblockstats.Handlers;
 import ml.igoryan.skyblockstats.Main;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -34,5 +35,18 @@ public class DatabaseHandler {
 
     public static void getPlayer(Connection db) throws SQLException {
 
+    }
+
+    public void addPlayer(Connection db, String playerName) throws SQLException {
+        String sql = "INSERT INTO SkyblockStatsPlayers(name,challengesDone,test) VALUES(?,?,?)";
+
+        try {
+            PreparedStatement pstmt = db.prepareStatement(sql);
+            pstmt.setString(1, playerName);
+            pstmt.setInt(2, 0);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
