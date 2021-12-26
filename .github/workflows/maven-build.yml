@@ -7,7 +7,6 @@ on:
   push:
     branches:
     - main
-    - feature/*
     - release/*
   workflow_dispatch:
   pull_request:
@@ -37,7 +36,19 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file SkyblockStats/pom.xml
       
-    - name: notification
+#    - name: notification
+#      if: cancelled() == false
+#      uses: xinthink/action-telegram@v1.1
+#      with:
+#        botToken: ${{ secrets.BotToken }}
+#        chatId: ${{ secrets.ChatID }}
+#        jobStatus: ${{ job.status }}
+#        skipSuccess: 'false'
+
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: notification
       if: cancelled() == false
       uses: xinthink/action-telegram@v1.1
       with:
@@ -45,4 +56,3 @@ jobs:
         chatId: ${{ secrets.ChatID }}
         jobStatus: ${{ job.status }}
         skipSuccess: 'false'
-
