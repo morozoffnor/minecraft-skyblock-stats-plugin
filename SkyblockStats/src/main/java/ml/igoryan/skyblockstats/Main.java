@@ -26,7 +26,7 @@ public final class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        getServer().getPluginManager().registerEvents(new Main(), this);
+        getServer().getPluginManager().registerEvents(this, this);
         // create config and messages file if there is none
         if(!configFile.exists()) {
             saveResource("config.yml", false);
@@ -47,6 +47,11 @@ public final class Main extends JavaPlugin implements Listener {
         }
 
         this.getLogger().info(config.getString("Database.db"));
+        try {
+            DatabaseHandler.getPlayer(db, "Igor");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

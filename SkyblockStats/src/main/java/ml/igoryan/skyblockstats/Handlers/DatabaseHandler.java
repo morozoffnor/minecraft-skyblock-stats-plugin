@@ -2,10 +2,7 @@ package ml.igoryan.skyblockstats.Handlers;
 
 import ml.igoryan.skyblockstats.Main;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DatabaseHandler {
     public static void createTable(Connection db, String table) throws SQLException {
@@ -22,10 +19,10 @@ public class DatabaseHandler {
                 "    test           boolean\n" +
                 ");\n" +
                 "\n" +
-                "create unique index SkyblockStatsPlayers_id_uindex\n" +
+                "create unique index if not exists SkyblockStatsPlayers_id_uindex\n" +
                 "    on SkyblockStatsPlayers (id);\n" +
                 "\n" +
-                "create unique index SkyblockStatsPlayers_name_uindex\n" +
+                "create unique index if not exists SkyblockStatsPlayers_name_uindex\n" +
                 "    on SkyblockStatsPlayers (name);\n" +
                 "\n";
         System.out.print(sql);
@@ -33,8 +30,17 @@ public class DatabaseHandler {
         statement.close();
     }
 
-    public static void getPlayer(Connection db) throws SQLException {
+    public static void getPlayer(Connection db, String playerName) throws SQLException {
+        String sql = "SELECT t.* FROM SkyblockStatsPlayers t WHERE name is ?";
 
+        try {
+            PreparedStatement pstmt = db.prepareStatement(sql);
+            pstmt.setString(1, playerName);
+            ResultSet resultSet = pstmt.executeQuery();
+            System.out.println(resultSet.getString("name"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addPlayer(Connection db, String playerName) throws SQLException {
