@@ -5,8 +5,8 @@ General:
   language: ru
 # If you have a database you want to store data in you should specify your setting here
 Database:
-  db: "lolkek2"
-  table: "table"
+  db: plugins/SkyblockStats/database.db
+  table: SkyblockStatsPlayers
   # Change isRemote value to True if you are using a remote SQLite database, not the local one.
   # fill in host/port and credentials as well.
   isRemote: False

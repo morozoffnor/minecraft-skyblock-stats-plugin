@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public final class Main extends JavaPlugin {
 
     private File configFile = new File(getDataFolder(), "config.yml");
-    private FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+    public FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
     private File messagesFile = new File(getDataFolder(), "messages-en.yml");
 
@@ -31,13 +31,17 @@ public final class Main extends JavaPlugin {
         }
         // then try to connect or create a database
         try {
+            if(!configFile.exists()) {
+                saveResource("config.yml", false);
+            }
            Connection db = DriverManager.getConnection("jdbc:sqlite:plugins/SkyblockStats/database.db");
-           System.out.println("Opened local database successfully!");
-           DatabaseHandler.createTable(db);
+           getLogger().info("Opened local database successfully!");
+           DatabaseHandler.createTable(db, config.getString("Database.table"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        this.getLogger().info(config.getString("Database.db"));
     }
 
     @Override
